@@ -27,8 +27,24 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="flex flex-col justify-start items-stretch min-h-screen">
+          <Content> {children}</Content>
+        </div>
+        {/* {children} */}
       </body>
     </html>
+  );
+}
+
+function Content({ children }: { children: React.ReactNode }) {
+  return (
+    <div id="page-container">
+      <div
+        id="page-content"
+        className={"grid grid-cols-[0px_1fr_0px] lg:grid-cols-[1fr_64rem_1fr]"}
+      >
+        {children}
+      </div>
+    </div>
   );
 }
