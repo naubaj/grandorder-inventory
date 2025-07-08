@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { MdiBin } from "@/public/MdiBin";
+
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 
@@ -85,25 +87,64 @@ export function Container({ materialData }: ContainerProps) {
     a.remove();
   }
 
+  function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsText(file, "UTF-8");
+    reader.onloadend = (readerEvent: ProgressEvent<FileReader>) => {
+      if (readerEvent?.target?.result) {
+        const resultString = readerEvent?.target?.result;
+        // Double Parse to read the JSON file
+        const object: { name: string; quantity: string }[] = JSON.parse(
+          JSON.parse(JSON.stringify(resultString))
+        );
+        const inventoryValues = object.map((data) => data.quantity);
+        // Save to local storage
+        localStorage.setItem(localStorageKey, JSON.stringify(inventoryValues));
+        setInventory(inventoryValues);
+        // Toast
+        toast.success("Data Imported");
+      }
+    };
+  }
+
   function resetData() {
     const defaultValues = Array(ITEM_LENGTH).fill(0);
     setInventory(defaultValues);
     localStorage.removeItem(localStorageKey);
-    toast.success("Delete successful");
+    // Toast
+    // toast.success("Delete successful");
+    toast("Inventory Reset Successful", { icon: <MdiBin /> });
   }
 
   return (
     <>
       <div className="flex items-center gap-4 pb-3">
+        <label
+          htmlFor="uploadInput"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+        >
+          Import data
+        </label>
+        <input
+          id="uploadInput"
+          type="file"
+          style={{ display: "none" }}
+          onChange={(e) => handleFileUpload(e)}
+          accept="application/JSON"
+        />
+
         <button
-          className="bg-red-600 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded"
+          className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
           onClick={resetData}
         >
           Reset
         </button>
 
         <button
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
           onClick={exportData}
         >
           Export to JSON
@@ -113,7 +154,7 @@ export function Container({ materialData }: ContainerProps) {
       <form action={(e) => onSubmit(e)}>
         <div className="flex items-center justify-evenly">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+            className="bg-neutral-600 hover:bg-neutral-700 text-white font-semibold py-2 px-4 rounded"
             type="submit"
           >
             Save Locally
