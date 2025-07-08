@@ -40,8 +40,24 @@ export function Container({ materialData }: ContainerProps) {
     toast.success("Saved Locally");
   }
 
+  function resetData() {
+    const defaultValues = Array(ITEM_LENGTH).fill(0);
+    setInventory(defaultValues);
+    localStorage.removeItem(localStorageKey);
+    toast.success("Delete successful");
+  }
+
   return (
     <>
+      <div className="flex items-center gap-4 pb-3">
+        <button
+          className="bg-red-600 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded"
+          onClick={resetData}
+        >
+          Reset
+        </button>
+      </div>
+
       <form action={(e) => onSubmit(e)}>
         <div className="flex items-center justify-evenly">
           <button
