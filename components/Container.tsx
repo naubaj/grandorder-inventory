@@ -40,6 +40,51 @@ export function Container({ materialData }: ContainerProps) {
     toast.success("Saved Locally");
   }
 
+  function exportData() {
+    const exportInventory: { name: string; quantity: number }[] = [];
+    // Format material data
+    materialData.map((item, i) => {
+      exportInventory.push({
+        name: item.name,
+        quantity: parseInt(inventory[i]),
+      });
+    });
+    // Call Function to download the file
+    downloadFile({
+      data: JSON.stringify(exportInventory),
+      fileName: "fgo-inventory.json",
+      fileType: "text/json",
+    });
+    // Toast
+    toast.success("Exported as fgo-inventory.json");
+  }
+
+  // Trigger a file download using blob and <a> tag
+  function downloadFile({
+    data,
+    fileName,
+    fileType,
+  }: {
+    data: string;
+    fileName: string;
+    fileType: string;
+  }) {
+    // Create a blobl with the data we want to download as a file
+    const blob = new Blob([data], { type: fileType });
+    // Create an anchor elemtn and dispatch a click event on it
+    // to trigger a download
+    const a = document.createElement("a");
+    a.download = fileName;
+    a.href = window.URL.createObjectURL(blob);
+    const clickEvt = new MouseEvent("click", {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvt);
+    a.remove();
+  }
+
   function resetData() {
     const defaultValues = Array(ITEM_LENGTH).fill(0);
     setInventory(defaultValues);
@@ -56,12 +101,19 @@ export function Container({ materialData }: ContainerProps) {
         >
           Reset
         </button>
+
+        <button
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+          onClick={exportData}
+        >
+          Export to JSON
+        </button>
       </div>
 
       <form action={(e) => onSubmit(e)}>
         <div className="flex items-center justify-evenly">
           <button
-            className="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
             type="submit"
           >
             Save Locally
