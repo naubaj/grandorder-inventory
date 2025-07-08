@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
+import { toast } from "react-hot-toast";
 
 const localStorageKey = "inventory";
 const ITEM_LENGTH = 94;
@@ -36,7 +37,7 @@ export function Container({ materialData }: ContainerProps) {
     // Save in local storage + inventory array
     localStorage.setItem(localStorageKey, JSON.stringify(inventoryValues));
     setInventory(inventoryValues);
-    console.log(inventoryValues);
+    toast.success("Saved Locally");
   }
 
   return (
