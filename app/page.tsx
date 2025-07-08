@@ -1,3 +1,4 @@
+"use client";
 import materialData from "@/public/materials.json";
 
 import { Container } from "@/components/Container";
