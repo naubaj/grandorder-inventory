@@ -12,11 +12,11 @@ export function NavBar() {
 
   return (
     <>
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end gap-4">
         <button
           data-toggle-theme="dark,light"
           data-act-class="ACTIVECLASS"
-          className="py-2"
+          className="py-2 cursor-pointer"
         >
           <MdiThemeLightDark />
         </button>
