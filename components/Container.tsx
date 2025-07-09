@@ -39,7 +39,7 @@ export function Container({ materialData }: ContainerProps) {
     // Save in local storage + inventory array
     localStorage.setItem(localStorageKey, JSON.stringify(inventoryValues));
     setInventory(inventoryValues);
-    toast.success("Saved Locally");
+    toast.success("Saved to Browser");
   }
 
   function exportData() {
@@ -157,7 +157,7 @@ export function Container({ materialData }: ContainerProps) {
             className="bg-neutral-600 hover:bg-neutral-700 text-white font-semibold py-2 px-4 rounded"
             type="submit"
           >
-            Save Locally
+            Save
           </button>
         </div>
 
